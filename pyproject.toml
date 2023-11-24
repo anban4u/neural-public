@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "neuralchat"
+version = "0.1.0"
+description = ""
+authors = ["Anshul Bansal <anshul.bansal@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+streamlit = "^1.28.2"
+numpy = "^1.26.2"
+sqlalchemy = "^2.0.23"
+pyodbc = "^5.0.1"
+streamlit-auth0-component = "^0.1.5"
+azure-storage-blob = "^12.19.0"
+azure-identity = "^1.15.0"
+langchain = "^0.0.338"
+langchain-cli = "^0.0.18"
+openai = "^1.3.3"
+azure-cosmos = "^4.5.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
