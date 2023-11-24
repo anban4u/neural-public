@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import asyncio
 from core.cosmos import get_container, GetOrCreateUser
+
 from auth0_component import login_button
 
 #define class User having name, avatar, id, email, idp, and other attributes
@@ -65,11 +66,12 @@ with st.sidebar:
                     user_info['email'], 
                     idp)
         
-        dump = user.toJSON()
-        st.write(dump)
-        st.write(type(user))
-        st.write(user)
+        # dump = user.toJSON()
+        # st.write(dump)
+        # st.write(type(user))
+        # st.write(user)
         asyncio.run(GetOrCreateUser(user))
+        st.session_state['user'] = user
 
     
     #st.write(user_info)
