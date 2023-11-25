@@ -26,7 +26,7 @@ def main():
         st.subheader("Chat History")
         history_container = st.container()
         with history_container:
-            for i in range(random.randrange(1, 14)):
+            for i in range(random.randrange(1, 2)):
                 st.link_button(label="Yesterday's Chat", url="https://youtube.com", use_container_width=True)
 
         uploaded_files = st.file_uploader("Choose your Document", accept_multiple_files=True)

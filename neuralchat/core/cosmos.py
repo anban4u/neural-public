@@ -23,8 +23,4 @@ def get_container(name):
     #st.write("Container\t" + container.id)
     return container
 
-async def GetOrCreateUser(user):
-    container = get_container("Users")
-    st.write("Container\t" + container.id)
-    await container.upsert_item(user)
-    st.write("upserted" + user.name)
+
