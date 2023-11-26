@@ -8,6 +8,8 @@ import charset_normalizer
 import streamlit as st
 import pandas as pd
 
+from core.User import User
+
 try:
     "Azure Blob Storage"
 
@@ -16,17 +18,20 @@ try:
 except Exception as ex:
     "Exception: " + ex
 
-def CreateContainer(name: str):
+def CreateContainer(user: User):
     try:
         # Create the BlobServiceClient object which will be used to create a container client
         blob_service_client = BlobServiceClient.from_connection_string(st.secrets["storageContainerConnectionString"])
-
+        #st.write(user)
         # Create a unique name for the container
-        container_name = name
+        container_name = user.id
 
         # Create the container
-        container_client = blob_service_client.create_container(container_name)
-        st.toast("Created storage container " + ex)
+        container_client = blob_service_client.get_container_client(container_name)
+        if not container_client.exists():
+            container_client.create_container()
+            st.toast("Created storage container " + container_name)
+        user.container = container_name
         return container_client
     except Exception as ex:
         st.toast(ex)

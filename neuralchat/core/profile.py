@@ -3,20 +3,17 @@ import streamlit as st
 import pandas as pd
 import asyncio
 from core.cosmos import get_container
+import pdb as pdb
 
-from pydantic import BaseModel
 from auth0_component import login_button
 
-from core.azure import CreateContainer
+from core.azure import CreateContainer, ContainerClient
 from core.azureai import AddDataSource, AddIndex, AddIndexer, GetIndexerStatus
+from core.User import User
 
 #define class User having name, avatar, id, email, idp, and other attributes
-class User(BaseModel):
-    name: str
-    avatar: str
-    id: str
-    email: str
-    idp: str
+
+
     
     
 def main():
@@ -62,7 +59,7 @@ def main():
             st.divider()
             st.write(user_info)
             'Hi ' + user_info['given_name'] + '!'
-            #split  google-oauth2|111834916048421935454 into google-oauth2 and 111834916048421935454
+            
             idp = user_info['sub'].split('|')[0]
             id = user_info['sub'].split('|')[1]
             user = User(name = user_info['name'], 
@@ -70,40 +67,68 @@ def main():
                         id=id, 
                         email=user_info['email'], 
                         idp=idp)
-            
-            # dump = user.toJSON()
+
             st.write(user.model_dump())
-            # st.write(type(user))
-            # st.write(user)
-            asyncio.run(GetOrCreateUser(user))
+
+            asyncio.run(GetOrCreateProfile(user))
 
             
-            #reload the page
-            st.experimental_rerun()
+            
 
     
     #st.write(user_info)
 
 
-def GetOrCreateProfile(user):
-    GetOrCreateUser(user)
-    st.session_state['user'] = user
-    CreateContainer(id)
-    st.success("Created storage container " + id)
-    # AddDataSource()
-    # st.success("Created data source")
-    # AddIndex()
-    # st.success("Created index")
-    # AddIndexer()
-    # st.success("Created indexer")
+async def GetOrCreateProfile(user: User):
+    
+    try:
+        user = await GetOrCreateUser(user)
+        st.session_state['user'] = user
+        if len(user.container) == 0:
+            client = CreateContainer(user)
+            user.container = client.container_name
+            st.success("Created storage container " + user.container)
+            st.session_state['user'] = user
+        if len(user.datasource) == 0:
+            AddDataSource(user)
+            st.success("Created data source")
+            st.session_state['user'] = user
+        if len(user.index) == 0:
+            AddIndex(user=user)
+            st.success("Created index")
+            st.session_state['user'] = user
+        if len(user.indexer) == 0:
+            AddIndexer(user)
+            st.success("Created indexer")
+            st.session_state['user'] = user
+        
+        container = get_container("Users")
+        user = await container.upsert_item(user.model_dump())
+        st.session_state['user'] = user
+        #st.experimental_rerun()
+    except Exception as ex:
+        st.error(ex)
+            
 
 
 
 async def GetOrCreateUser(user: User):
     container = get_container("Users")
+    #check if user exists in container
+
+    existing = await container.read_item(user.id, user.id)
+    if existing:
+        st.warning("User already exists")
+        st.write(existing)
+        user = existing
+        return
     #st.write("Container\t" + container.id)
-    await container.upsert_item(user.model_dump())
-    st.toast("upserted")
+    user = await container.upsert_item(user.model_dump())
+    
+    st.sucess("upserted")
+    return user
+    
+    
 
 #read user data from cosmos into a pandas dataframe
 async def get_user_data(container):
