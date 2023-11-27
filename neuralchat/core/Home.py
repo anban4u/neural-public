@@ -1,5 +1,5 @@
 import random
-
+import core.azure as azure
 import streamlit as st
 def main():
     st.set_page_config(page_title="NeuralNextAI", layout="wide", initial_sidebar_state="expanded", menu_items=None)
@@ -29,11 +29,12 @@ def main():
             for i in range(random.randrange(1, 2)):
                 st.link_button(label="Yesterday's Chat", url="https://youtube.com", use_container_width=True)
 
-        uploaded_files = st.file_uploader("Choose your Document", accept_multiple_files=True)
-        for uploaded_file in uploaded_files:
-            bytes_data = uploaded_file.read()
-            st.write("filename:", uploaded_file.name)
-            st.write(bytes_data)
+        # uploaded_files = st.file_uploader("Choose your Document", accept_multiple_files=True)
+        # for uploaded_file in uploaded_files:
+        #     bytes_data = uploaded_file.read()
+        #     st.write("filename:", uploaded_file.name)
+        #     st.write(bytes_data)
+        azure.main()
 
     st.title("NextAI BOT")
 

@@ -51,6 +51,12 @@ def upload_file(bytes_data: bytes, file_name: str, content_type: Optional[str] =
     # Generate a SAS URL to the blob and return it
     #st.session_state['file_url'] = blob_client.url + '?' + generate_blob_sas(account_name, container_name, file_name,account_key=account_key,  permission="r", expiry=datetime.utcnow() + timedelta(hours=3))
 def main():
+    sessionUser = st.session_state.get('user')
+    if sessionUser is None:
+        st.error("Please login to continue")
+        return
+    user = User(**sessionUser)
+    container_name = user.container
     try:
         with st.expander("Add documents in Batch", expanded=True):
             # config = ConfigHelper.get_active_config_or_default()
@@ -64,7 +70,7 @@ def main():
                     bytes_data = up.getvalue()
                     if st.session_state.get('filename', '') != up.name:
                         # Upload a new file
-                        upload_file(bytes_data, up.name)
+                        upload_file(bytes_data, up.name, container_name=container_name)
                 if len(uploaded_files) > 0:
                     st.success(f"{len(uploaded_files)} documents uploaded. Embeddings computation in progress. \nPlease note this is an asynchronous process and may take a few minutes to complete.\nYou can check for further details in the Azure Function logs.")
 

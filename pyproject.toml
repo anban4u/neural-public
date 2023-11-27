@@ -6,7 +6,7 @@ authors = ["Anshul Bansal <anshul.bansal@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "3.11.4"
 streamlit = "^1.28.2"
 numpy = "^1.26.2"
 sqlalchemy = "^2.0.23"
@@ -18,6 +18,8 @@ langchain = "^0.0.338"
 langchain-cli = "^0.0.18"
 openai = "^1.3.3"
 azure-cosmos = "^4.5.1"
+pyautogen = "^0.2.0"
+chess = "^1.10.0"
 
 
 [build-system]

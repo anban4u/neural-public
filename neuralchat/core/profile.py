@@ -59,7 +59,7 @@ def main():
             st.divider()
             st.write(user_info)
             'Hi ' + user_info['given_name'] + '!'
-            
+
             idp = user_info['sub'].split('|')[0]
             id = user_info['sub'].split('|')[1]
             user = User(name = user_info['name'], 
@@ -105,7 +105,8 @@ async def GetOrCreateProfile(user: User):
         container = get_container("Users")
         user = await container.upsert_item(user.model_dump())
         st.session_state['user'] = user
-        #st.experimental_rerun()
+        st.success("Profile created")
+        st.experimental_rerun()
     except Exception as ex:
         st.error(ex)
             
@@ -120,11 +121,12 @@ async def GetOrCreateUser(user: User):
     if existing:
         st.warning("User already exists")
         st.write(existing)
-        user = existing
-        return
+        
+        user = User(**existing)
+        return user
     #st.write("Container\t" + container.id)
     user = await container.upsert_item(user.model_dump())
-    
+    user = User(**user)
     st.sucess("upserted")
     return user
     
