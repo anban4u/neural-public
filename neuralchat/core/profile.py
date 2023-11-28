@@ -116,18 +116,20 @@ async def GetOrCreateProfile(user: User):
 async def GetOrCreateUser(user: User):
     container = get_container("Users")
     #check if user exists in container
-
-    existing = await container.read_item(user.id, user.id)
-    if existing:
-        st.warning("User already exists")
-        st.write(existing)
-        
-        user = User(**existing)
-        return user
+    try:
+        existing = await container.read_item(user.id, user.id)
+        if existing:
+            st.warning("User already exists")
+            st.write(existing)
+            
+            user = User(**existing)
+            return user
+    except Exception as ex:
+        st.warning("User does not exist. Creating new one")
     #st.write("Container\t" + container.id)
     user = await container.upsert_item(user.model_dump())
     user = User(**user)
-    st.sucess("upserted")
+    st.success("upserted")
     return user
     
     
