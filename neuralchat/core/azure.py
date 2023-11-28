@@ -59,9 +59,15 @@ def main():
     container_name = user.container
     try:
         with st.expander("Add documents in Batch", expanded=True):
+            
+            blob_service_client : BlobServiceClient = BlobServiceClient.from_connection_string(st.secrets["storageContainerConnectionString"])
+            container_client = blob_service_client.get_container_client(container_name)
+            blobs = container_client.list_blobs()
+            df = pd.DataFrame([{'name': blob.name, 'url': blob.snapshot} for blob in blobs])
+            st.dataframe(df)
             # config = ConfigHelper.get_active_config_or_default()
             # file_type = [processor.document_type for processor in config.document_processors]
-            uploaded_files = st.file_uploader("Upload a document to add it to the Azure Storage Account, compute embeddings and add them to the Azure Cognitive Search index. Check your configuration for available document processors.", 
+            uploaded_files = st.file_uploader("Upload Files", 
                                             #type=file_type, 
                                             accept_multiple_files=True)
             if uploaded_files is not None:
@@ -75,20 +81,21 @@ def main():
                     st.success(f"{len(uploaded_files)} documents uploaded. Embeddings computation in progress. \nPlease note this is an asynchronous process and may take a few minutes to complete.\nYou can check for further details in the Azure Function logs.")
 
             col1, col2, col3 = st.columns([2,1,2])
-            # with col1:
-            #     st.button("Process and ingest new files", on_click=remote_convert_files_and_add_embeddings)
+            with col1:
+                st.button("Process new files", on_click=None)
             with col3:
-                #st.button("Reprocess all documents in the Azure Storage account", on_click=remote_convert_files_and_add_embeddings, args=(True,))
-                st.write("Reprocess all documents in the Azure Storage account")
+                st.button("Reprocess all documents", on_click=None, args=(True,))
+                #st.write("Reprocess")
 
-        with st.expander("Add URLs to the knowledge base", expanded=True):
-            col1, col2 = st.columns([3,1])
-            with col1: 
-                st.text_area("Add a URLs and than click on 'Compute Embeddings'", placeholder="PLACE YOUR URLS HERE SEPARATED BY A NEW LINE", height=100, key="urls")
+        # with st.expander("Add URLs to the knowledge base", expanded=True):
+        #     col1, col2 = st.columns([3,1])
+        #     with col1: 
+        #         st.text_area("Add a URLs and than click on 'Compute Embeddings'", placeholder="PLACE YOUR URLS HERE SEPARATED BY A NEW LINE", height=100, key="urls")
 
-            with col2:
-                st.selectbox('Embeddings models', [os.getenv('AZURE_OPENAI_EMBEDDING_MODEL')], disabled=True)
-                #st.button("Process and ingest web pages", on_click=add_urls, key="add_url")
+        #     with col2:
+        #         st.selectbox('Embeddings models', [os.getenv('AZURE_OPENAI_EMBEDDING_MODEL')], disabled=True)
+        #         #st.button("Process and ingest web pages", on_click=add_urls, key="add_url")
+       
 
     except Exception as e:
         st.error(traceback.format_exc())
