@@ -7,6 +7,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, g
 import charset_normalizer
 import streamlit as st
 import pandas as pd
+import humanize
 
 from core.User import User
 
@@ -63,7 +64,7 @@ def main():
             blob_service_client : BlobServiceClient = BlobServiceClient.from_connection_string(st.secrets["storageContainerConnectionString"])
             container_client = blob_service_client.get_container_client(container_name)
             blobs = container_client.list_blobs()
-            df = pd.DataFrame([{'name': blob.name, 'url': blob.snapshot} for blob in blobs])
+            df = pd.DataFrame([{'name': blob.name, 'size': humanize.naturalsize(blob.size)} for blob in blobs])
             st.dataframe(df)
             # config = ConfigHelper.get_active_config_or_default()
             # file_type = [processor.document_type for processor in config.document_processors]
