@@ -11,76 +11,44 @@ from core.azure import CreateContainer, ContainerClient
 from core.azureai import AddDataSource, AddIndex, AddIndexer, GetIndexerStatus
 from core.User import User
 
-#define class User having name, avatar, id, email, idp, and other attributes
+# define class User having name, avatar, id, email, idp, and other attributes
 
 
-    
-    
 def main():
-    
-    st.markdown("""
-            <style>
-            .circle-image {
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                overflow: hidden;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-            }
-
-            .circle-image img {
-                width: 50px;
-                height: 50px;
-                object-fit: cover;
-            }
-            </style>
-            """, unsafe_allow_html=True)
-    #container = get_container("Users")
+    # container = get_container("Users")
     clientId = st.secrets["clientId"]
     domain = st.secrets["domain"]
-    #st.write(type(container))
-    with st.sidebar:
-        
-        user_info = login_button(clientId, domain = domain)
-        if(user_info == False):
-            st.toast("You must login to continue")
-        else:
+    # st.write(type(container))
+
+    user_info = login_button(clientId, domain=domain)
+    if (user_info == False):
+        st.toast("You must login to continue")
+    else:
+        with st.sidebar:
+
             cola, colb = st.columns([0.2, 0.8])
 
             with cola:
-                st.markdown('''
-                <div class="circle-image">
-                    <img src ="''' + user_info['picture'] + '''">
-                </div>
-                ''', unsafe_allow_html=True)
-            with colb:
-                st.title("Hi " + user_info['given_name'] + "👋")
+                st.write(user_info)
+                'Hi ' + user_info['given_name'] + '!'
 
-            st.divider()
-            st.write(user_info)
-            'Hi ' + user_info['given_name'] + '!'
+                idp = user_info['sub'].split('|')[0]
+                id = user_info['sub'].split('|')[1]
+                user = User(name=user_info['name'],
+                            avatar=user_info['picture'],
+                            id=id,
+                            email=user_info['email'],
+                            idp=idp)
 
-            idp = user_info['sub'].split('|')[0]
-            id = user_info['sub'].split('|')[1]
-            user = User(name = user_info['name'], 
-                        avatar=user_info['picture'], 
-                        id=id, 
-                        email=user_info['email'], 
-                        idp=idp)
+                st.write(user.model_dump())
 
-            st.write(user.model_dump())
+                asyncio.run(GetOrCreateProfile(user))
 
-            asyncio.run(GetOrCreateProfile(user))
-
-            
-            
-
-    
-    #st.write(user_info)
+    # st.write(user_info)
 
 
 async def GetOrCreateProfile(user: User):
-    
+
     try:
         user = await GetOrCreateUser(user)
         st.session_state['user'] = user
@@ -101,51 +69,44 @@ async def GetOrCreateProfile(user: User):
         #     AddIndexer(user)
         #     st.success("Created indexer")
         #     st.session_state['user'] = user
-        
+
         # container = get_container("Users")
         # user = await container.upsert_item(user.model_dump())
         st.session_state['user'] = user
         st.success("Profile created")
-        st.experimental_rerun()
+        st.rerun()
     except Exception as ex:
         st.error(ex)
-            
-
 
 
 async def GetOrCreateUser(user: User):
     container = get_container("Users")
-    #check if user exists in container
+    # check if user exists in container
     try:
         existing = await container.read_item(user.id, user.id)
         if existing:
             st.warning("User already exists")
             st.write(existing)
-            
+
             user = User(**existing)
             return user
     except Exception as ex:
         st.warning("User does not exist. Creating new one")
-    #st.write("Container\t" + container.id)
+    # st.write("Container\t" + container.id)
     user = await container.upsert_item(user.model_dump())
     user = User(**user)
     st.success("upserted")
     return user
-    
-    
 
-#read user data from cosmos into a pandas dataframe
+
+# read user data from cosmos into a pandas dataframe
 async def get_user_data(container):
-    
+
     items = container.read_all_items()
-    #st.write(type(items))
+    # st.write(type(items))
     users = [item async for item in items]
     df = pd.DataFrame(users)
     df
 
 
-
-#asyncio.run(get_user_data())
-
-
-
+# asyncio.run(get_user_data())
