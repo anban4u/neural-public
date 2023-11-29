@@ -1,0 +1,95 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+header {
+    visibility: hidden;
+}
+
+.stApp {}
+
+.spacing-component {
+    margin: 20px;
+    height: 20px;
+}
+
+.header_bar {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center
+}
+
+.header_bar p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.75px;
+    line-height: 24px;
+}
+
+
+.stTabs [data-baseweb="tab-border"] {
+    display: none;
+}
+
+.stTabs [data-baseweb="tab-highlight"] {
+    display: none;
+}
+
+
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 80px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background-color: #F0F2F6;
+    padding: 2px 30px;
+    height: fit-content;
+    border-radius: 6px;
+}
+
+.stTabs [data-baseweb="tab"] p {
+    font-size: 16px;
+}
+
+
+.stTabs [aria-selected="true"] {
+    background-color: #10975f;
+    color: #ffffff;
+}
+
+.login_brand_icon {
+    width: 100%;
+    max-width: 380px;
+}
+
+.login_app_tag p {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 52px;
+    letter-spacing: 0.80px;
+}
+
+.block-container [data-testid="stHorizontalBlock"] {
+    align-items: center;
+}
+
+.subHeading {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.80px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.st-emotion-cache-27b17hr {
+    text-align: center;
+}
+
+.login_brand_icon_wrapper {
+    text-align: center;
+}
