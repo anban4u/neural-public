@@ -11,3 +11,5 @@ class User(BaseModel):
     index: str = ""
     indexer: str = ""
     indexerStatus: str = ""
+    tokensAllotted:int = 5000
+    tokensUsed:int = 0
