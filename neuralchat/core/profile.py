@@ -57,21 +57,21 @@ async def GetOrCreateProfile(user: User):
             user.container = client.container_name
             st.success("Created storage container " + user.container)
             st.session_state['user'] = user
-        if len(user.datasource) == 0:
-            AddDataSource(user)
-            st.success("Created data source")
-            st.session_state['user'] = user
-        if len(user.index) == 0:
-            AddIndex(user=user)
-            st.success("Created index")
-            st.session_state['user'] = user
-        if len(user.indexer) == 0:
-            AddIndexer(user)
-            st.success("Created indexer")
-            st.session_state['user'] = user
+        # if len(user.datasource) == 0:
+        #     AddDataSource(user)
+        #     st.success("Created data source")
+        #     st.session_state['user'] = user
+        # if len(user.index) == 0:
+        #     AddIndex(user=user)
+        #     st.success("Created index")
+        #     st.session_state['user'] = user
+        # if len(user.indexer) == 0:
+        #     AddIndexer(user)
+        #     st.success("Created indexer")
+        #     st.session_state['user'] = user
 
-        container = get_container("Users")
-        user = await container.upsert_item(user.model_dump())
+        # container = get_container("Users")
+        # user = await container.upsert_item(user.model_dump())
         st.session_state['user'] = user
         st.success("Profile created")
         st.rerun()

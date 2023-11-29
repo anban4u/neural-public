@@ -15,7 +15,7 @@ headers = {
     'Content-Type': 'application/json',
     'api-key': f'{searchAdminKey}'
     }
-
+indexer = st.secrets["indexerName"]
 def AddDataSource(user: User):
     datasource = "ds-" + user.container.lower()
     st.write("datasource name is " + datasource)
@@ -271,12 +271,14 @@ def AddIndexer(user: User):
     st.success(data.decode("utf-8"))
 
 def RunIndexer(user: User):
-    conn = http.client.HTTPSConnection("{{searchservice}}.search.windows.net")
+    conn = http.client.HTTPSConnection(f"{searchService}.search.windows.net")
     payload = ''
     headers = {
-    'x-ms-client-request-id': f'{uuid()}'
+    'x-ms-client-request-id': f'{uuid.uuid4()}',
+    'Content-Type': 'application/json',
+    'api-key': f'{searchAdminKey}'
     }
-    conn.request("POST", f"/indexers('{user.indexer}')/search.run?api-version={apiVersion}", payload, headers)
+    conn.request("POST", f"/indexers('{indexer}')/search.run?api-version={apiVersion}", payload, headers)
     res = conn.getresponse()
     data = res.read()
     print(data.decode("utf-8"))
@@ -285,7 +287,7 @@ def GetIndexerStatus(user: User):
     conn = http.client.HTTPSConnection(f"{searchService}.search.windows.net")
     payload = ''
     
-    conn.request("GET", f"/indexers/{user.indexer}/status?api-version={apiVersion}", payload, headers)
+    conn.request("GET", f"/indexers/{indexer}/status?api-version={apiVersion}", payload, headers)
     res = conn.getresponse()
     data = res.read()
 
