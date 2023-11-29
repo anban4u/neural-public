@@ -1,5 +1,5 @@
 import random
-import core.azure as azure
+import core.azure as az
 import streamlit as st
 import core.profile as profile
 
@@ -60,7 +60,7 @@ def main():
         #     bytes_data = uploaded_file.read()
         #     st.write("filename:", uploaded_file.name)
         #     st.write(bytes_data)
-        azure.main()
+        az.main()
 
     col1, col2 = st.columns(2)
     col1.metric("Total Documents Uploaded", "8")

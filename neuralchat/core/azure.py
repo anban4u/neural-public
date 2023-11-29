@@ -3,7 +3,6 @@ import os
 import uuid
 import traceback
 from typing import Optional
-from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient, generate_blob_sas, ContentSettings
 import charset_normalizer
 import streamlit as st
