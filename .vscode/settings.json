@@ -1,0 +1,5 @@
+{
+    "appService.showBuildDuringDeployPrompt": false,
+    "appService.defaultWebAppToDeploy": "/subscriptions/4f3e4c3b-1a9c-4b48-a2c6-1520ddfae6e2/resourceGroups/rg-aueast-neuralchataccl/providers/Microsoft.Web/sites/neural-demo1",
+    "appService.deploySubpath": "."
+}
