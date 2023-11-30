@@ -26,27 +26,27 @@ st.markdown(
 
 
 def main():
-    st.markdown("""
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark " style="background-color: #262626;">
-    <a class="navbar-brand" href="https://youtube.com/dataprofessor" target="_blank">Neural Next AI</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav">
-        <li class="nav-item active">
-            <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#" target="_blank">Pricing</a>
-        </li>
-        <li class="nav-item">
-            <button type="button" class="btn btn-info">Sign In / Sign Up</button>
-        </li>
-        </ul>
-    </div>
-    </nav>
-    """, unsafe_allow_html=True)
+    # st.markdown("""
+    # <nav class="navbar fixed-top navbar-expand-lg navbar-dark " style="background-color: #262626;">
+    # <a class="navbar-brand" href="https://youtube.com/dataprofessor" target="_blank">Neural Next AI</a>
+    # <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    #     <span class="navbar-toggler-icon"></span>
+    # </button>
+    # <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+    #     <ul class="navbar-nav">
+    #     <li class="nav-item active">
+    #         <a class="nav-link disabled" href="#">Home <span class="sr-only">(current)</span></a>
+    #     </li>
+    #     <li class="nav-item">
+    #         <a class="nav-link" href="#" target="_blank">Pricing</a>
+    #     </li>
+    #     <li class="nav-item">
+    #         <button type="button" class="btn btn-info">Sign In / Sign Up</button>
+    #     </li>
+    #     </ul>
+    # </div>
+    # </nav>
+    # """, unsafe_allow_html=True)
 
     # with open(brand_icon_path, "rb") as img_file:
     #     img_bytes = img_file.read()
@@ -70,18 +70,18 @@ def main():
             ''', unsafe_allow_html=True)
             st.markdown("<br>", unsafe_allow_html=True)
             cola, cols = st.columns(2)
+            loginbutton.main()
+            # with cola:
+            #     loginbutton.main()
 
-            with cola:
-                loginbutton.main()
-
-            with cols:
-                st.button("Try For Free", type="secondary",
-                          use_container_width=True)
+            # with cols:
+            #     st.button("Try For Free", type="secondary",
+            #               use_container_width=True)
 
         with col2:
             st.markdown(f'''
             <div class="login_brand_icon_wrapper">
-            <img src="brand_icon_path" class="login_brand_icon">
+            <img src="{brand_icon_path}" class="login_brand_icon">
             ''', unsafe_allow_html=True)
 
     st.markdown("<br/>", unsafe_allow_html=True)
@@ -135,7 +135,8 @@ def main():
         st.markdown("<br/>", unsafe_allow_html=True)
         left_co, cent_co, last_co = st.columns(3)
         with cent_co:
-            st.image(benefits_image_path)
+            st.markdown(f'<img src="{benefits_image_path}" class="login_brand_icon">', unsafe_allow_html=True)
+            #st.image(benefits_image_path)
 
 
 # modal = Modal(

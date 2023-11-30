@@ -62,9 +62,9 @@ def main():
         #     st.write(bytes_data)
         az.main()
 
-    col1, col2 = st.columns(2)
-    col1.metric("Total Documents Uploaded", "8")
-    col2.metric("Available Tokens", "1000 Tokens")
+    # col1, col2 = st.columns(2)
+    # col1.metric("Total Documents Uploaded", "8")
+    # col2.metric("Available Tokens", "1000 Tokens")
 
     # Initialize chat history
     if "messages" not in st.session_state:

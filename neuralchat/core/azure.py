@@ -109,12 +109,17 @@ def loadBlobs(user: User):
     container_client = blob_service_client.get_container_client(container_name)
     blobs = container_client.list_blobs(name_starts_with=user.id.lower() + "/")
     df = pd.DataFrame([{'name': blob.name.removeprefix(user.id.lower() + "/"),
-                        'size': humanize.naturalsize(blob.size), 'type': get_file_type(blob.name)} for blob in blobs])
-    for index, row in df.iterrows():
-        # Make sure that 'type' is the correct column name and it exists in your DataFrame
-        icon_class = get_file_icon(row['name'])
-        st.markdown(
-            f'''<div class="list_wrapper"><span class='material-icons'>{icon_class}</span> <div class="list_style"><span>{row['name']}</span> <span class="list_item_size">{row['size']}</span></div></div><hr/> ''', unsafe_allow_html=True)
+                        'size': humanize.naturalsize(blob.size)
+                        } 
+                        for blob in blobs])
+    st.write(df)
+
+    #, 'type': get_file_type(blob.name)
+    # for index, row in df.iterrows():
+    #     # Make sure that 'type' is the correct column name and it exists in your DataFrame
+    #     icon_class = get_file_icon(row['name'])
+    #     st.markdown(
+    #         f'''<div class="list_wrapper"><span class='material-icons'>{icon_class}</span> <div class="list_style"><span>{row['name']}</span> <span class="list_item_size">{row['size']}</span></div></div><hr/> ''', unsafe_allow_html=True)
 
 
 def main():
@@ -151,14 +156,7 @@ def main():
 
             # st.write("Reprocess")
 
-        # with st.expander("Add URLs to the knowledge base", expanded=True):
-        #     col1, col2 = st.columns([3,1])
-        #     with col1:
-        #         st.text_area("Add a URLs and than click on 'Compute Embeddings'", placeholder="PLACE YOUR URLS HERE SEPARATED BY A NEW LINE", height=100, key="urls")
-
-        #     with col2:
-        #         st.selectbox('Embeddings models', [os.getenv('AZURE_OPENAI_EMBEDDING_MODEL')], disabled=True)
-        #         #st.button("Process and ingest web pages", on_click=add_urls, key="add_url")
+        
 
     except Exception as e:
         st.error(traceback.format_exc())
